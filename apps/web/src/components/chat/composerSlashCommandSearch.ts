@@ -116,7 +116,10 @@ export function searchSlashCommandItems(
   items: ReadonlyArray<SlashSearchItem>,
   query: string,
 ): SlashSearchItem[] {
-  const normalizedQuery = normalizeSearchQuery(query, { trimLeadingPattern: /^\/+/ });
+  const normalizedQuery = normalizeSearchQuery(query, { trimLeadingPattern: /^\/+/ }).replace(
+    /^goal[\t ]+/,
+    "goal ",
+  );
   if (!normalizedQuery) {
     return [...items];
   }

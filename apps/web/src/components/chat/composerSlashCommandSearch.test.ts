@@ -34,9 +34,9 @@ describe("goal subcommand completion", () => {
     );
   });
 
-  it("completes a partial Codex subcommand", () => {
-    const items = expandGoalSubcommands([goal], "goal r", "Fix the tests");
-    expect(searchSlashCommandItems(items, "goal r").map((item) => item.label)).toEqual([
+  it.each(["goal r", "goal  r", "goal\tr", "GOAL R"])("completes %j", (query) => {
+    const items = expandGoalSubcommands([goal], query, "Fix the tests");
+    expect(searchSlashCommandItems(items, query).map((item) => item.label)).toEqual([
       "/goal resume",
     ]);
   });
