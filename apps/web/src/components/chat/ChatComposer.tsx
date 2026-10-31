@@ -70,7 +70,7 @@ import {
   collapseExpandedComposerCursor,
   composerRequiresModifier,
   composerStateAtPromptEnd,
-  detectComposerTrigger,
+  detectComposerTrigger as detectComposerTriggerForProvider,
   expandCollapsedComposerCursor,
   formatAssistantCitationForComposer,
   isPathSuggestionCurrent,
@@ -984,6 +984,13 @@ export const ChatComposer = memo(function ChatComposer(props: ChatComposerProps)
       ? selectedProviderStatus.reportsContextWindow === true
       : null,
   });
+
+  const detectComposerTrigger = (text: string, cursor: number) =>
+    detectComposerTriggerForProvider(
+      text,
+      cursor,
+      selectedProvider === "codex" || selectedProvider === "claudeAgent",
+    );
 
   const [composerCursor, setComposerCursor] = useState(() => {
     const value = isLiteralPendingAnswer ? (activePendingProgress?.customAnswer ?? prompt) : prompt;
@@ -1907,6 +1914,9 @@ export const ChatComposer = memo(function ChatComposer(props: ChatComposerProps)
       });
       if (applied) {
         setComposerHighlightedItemId(null);
+        if (item.command.name === "goal" && /^goal[\t ]/i.test(trigger.query)) {
+          dismissComposerTrigger(trigger);
+        }
       }
       return;
     }

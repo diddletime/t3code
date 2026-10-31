@@ -248,10 +248,14 @@ export function collapseExpandedComposerCursor(
   return collapsedCursor;
 }
 
-export function detectComposerTrigger(text: string, cursorInput: number): ComposerTrigger | null {
+export function detectComposerTrigger(
+  text: string,
+  cursorInput: number,
+  goalSubcommands = false,
+): ComposerTrigger | null {
   const cursor = clampCursor(text, cursorInput);
   const prefix = text.slice(0, cursor);
-  if (/^\/goal[\t ]+[a-z]*$/i.test(prefix)) {
+  if (goalSubcommands && /^\/goal[\t ]+[a-z]*$/i.test(prefix)) {
     return {
       kind: "slash-command",
       query: prefix.slice(1),

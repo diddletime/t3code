@@ -239,7 +239,7 @@ describe("detectComposerTrigger", () => {
   it.each(["/goal ", "/goal r", "/goal resume", "/goal edit"])(
     "keeps goal subcommand completion open for %j",
     (text) => {
-      expect(detectComposerTrigger(text, text.length)).toEqual({
+      expect(detectComposerTrigger(text, text.length, true)).toEqual({
         kind: "slash-command",
         query: text.slice(1),
         rangeStart: 0,
@@ -251,6 +251,13 @@ describe("detectComposerTrigger", () => {
   it.each(["Mention /goal resume", "/goal fix the tests", "/goal\nresume"])(
     "does not complete a goal subcommand in %j",
     (text) => expect(detectComposerTrigger(text, text.length)).toBeNull(),
+  );
+
+  it.each(["/goal ", "/goal r", "/goal objective"])(
+    "leaves %j alone without goal support",
+    (text) => {
+      expect(detectComposerTrigger(text, text.length)).toBeNull();
+    },
   );
 
   it.each([
