@@ -1914,7 +1914,10 @@ export const ChatComposer = memo(function ChatComposer(props: ChatComposerProps)
       });
       if (applied) {
         setComposerHighlightedItemId(null);
-        if (item.command.name === "goal" && /^goal[\t ]/i.test(trigger.query)) {
+        if (
+          item.command.name.startsWith("goal ") ||
+          (item.command.name === "goal" && /^goal[\t ]/i.test(trigger.query))
+        ) {
           dismissComposerTrigger(trigger);
         }
       }
